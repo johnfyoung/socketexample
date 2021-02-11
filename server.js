@@ -12,15 +12,21 @@ const app = express();
 const http = require('http').createServer(app);
 
 // This will create a socket io instance that can also utilize
-// the http service. socket.io will try to use WebSockets, which 
-// is a different protocol (ws) than http. It will use the 
-// same port as the http service. If WebSockets are unavailable 
-// due to an old browser, socket.io will try to use AJAX polling
-// from the client to see if there are any new socket events
+// the http service. socket.io defaults to using long polling over the 
+// http connection and tries to upgrade the connection to use
+// WebSockets, which is a different protocol (ws) than http. It uses the 
+// same port as the http service.
+//
+// To ensure we use websockets, we have set the order of the transport to 
+// prefer the websocket transport
+// 
 // @see https://stackoverflow.com/questions/10112178/differences-between-socket-io-and-websockets
-const io = require('socket.io')(http);
+// @see https://github.com/socketio/socket.io-client/issues/883
+const io = require('socket.io')(http, {
+  transports: ['websocket', 'polling']
+});
 
-// Serve up static assets (usually on heroku)
+// Serve up static assets (usually in production on heroku)
 if (process.env.NODE_ENV === "production") {
   app.use(express.static("client/build"));
 }
@@ -30,28 +36,32 @@ if (process.env.NODE_ENV === "production") {
 // a realtime socket between the client and the server
 // is opened using WebSockets
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  console.log('Socket connected: ', socket.id);
   
   // when the socket is closed, e.g., when a web page closes or is refreshed
   // a socket disconnect event happens
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log('Socket disconnected: ', socket.id);
   });
 
   // listening for 'chat message' events
-  socket.on('chat message', (msg) => {
+  socket.on('chat message', (msg, fn) => {
     console.log('message: ' + msg);
-
-    // broadcast the new msg to those clients listening for 'chat message'
-    // events
-    io.emit('chat message', msg);
+    if(!msg.username) {
+      msg.username = "Anonymous";
+    }
+    fn("Got your message");
+    // broadcast the new msg to those clients listening for 'chat message' events
+    // The broadcast object on this socket doesn't send the message back to its destination
+    socket.broadcast.emit('chat message', msg);
   });
 });
 
-// Send every request to the React app
-// Define any API routes before this runs
+// When in production, send every unhandled request to the React app by refreshing the public index.html
+// When in development, the webpack dev server catches these requests at localhost:3000
+// Note: define any API routes before this runs
 app.get("*", function(req, res) {
-  console.log("Got a request for the client eh")
+  console.log("Got a request for the client,eh?...probably handled by React Router");
   res.sendFile(path.join(__dirname, "./client/build/index.html"));
 });
 
