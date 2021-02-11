@@ -89,7 +89,7 @@ function App() {
   return (
     <div className="App container">
       <div className="row d-flex main-row">
-        <div className="col-xs-12 col-md-8 col-xl-6">
+        <div className="col-xs-12 col-md-8 col-xl-6 main-container">
           <div className="messageContainer" ref={messagesEl}>
             {messages && messages.map(msg => <p className={`message ${msg.isMe ? 'message-me' : 'message-notme'}`} key={Math.floor(Math.random() * 100000)}><span className="message-sender">{msg.username}</span><br/>{msg.msg}</p>)}</div>
 
