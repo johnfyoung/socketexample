@@ -1,3 +1,7 @@
+body {
+  padding-top: 1rem;
+}
+
 .App {
   button {
     cursor: pointer;
@@ -27,7 +31,7 @@
         overflow: scroll;
         padding: 10px;
         background: #ccc;
-        flex: 1 0 83vh;
+        flex: 1 0 76vh;
         display: flex;
         flex-direction: column;
         align-items: flex-start;
