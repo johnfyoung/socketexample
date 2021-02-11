@@ -37,7 +37,7 @@ function App() {
       // Note: the path to the websocket on the server is hard coded here because it
       // wouldn't proxy from the dev server port (3000) to the server port (3001)
       // This would normally be window.location.href if in production.
-      const socket = io("ws://localhost:3001", { transports: ['websocket', 'polling'] });
+      const socket = io(process.env.NODE_ENV === 'production' ? window.location.href : "ws://localhost:3001", { transports: ['websocket', 'polling'] });
 
       socket.on("connection", (msg) => {
         console.log("socket connected: ", msg);
