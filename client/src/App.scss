@@ -1,0 +1,53 @@
+.App {
+  button {
+    cursor: pointer;
+    border-radius: 0.3rem;
+    border: 1px solid #555;
+    transition: all 0.3s;
+  }
+
+  button:hover {
+    background-color: #7722ff;
+    color: #fff;
+  }
+
+  .main-row {
+    justify-content: center;
+  }
+
+  .messageContainer {
+    height: 300px;
+    overflow: scroll;
+    padding: 10px;
+    background: #ccc;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    .message {
+      padding: 0.25rem 0.8rem;
+      border-radius: 0.3rem;
+      background: rgb(171, 222, 255);
+      display: inline-block;
+
+      &.message-me {
+        align-self: flex-end;
+        background: rgb(212, 255, 209);
+      }
+
+      .message-sender {
+        font-size: 0.7rem;
+        color: #666;
+      }
+    }
+  }
+
+  .msginput {
+    display: flex;
+  }
+
+  .help-text {
+    font-size: 0.8rem;
+    color: #888;
+  }
+}

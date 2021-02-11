@@ -2,19 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 
 const styles = {
-  root: {
-    width:"400px",
-    margin: "0 auto",
-  },
-  messageContainer: {
-    height:"300px",
-    overflow:"scroll",
-    padding: "10px",
-    background: "#ccc",
-  },
-  msgInput: {
-    display: "flex",
-  }
+
 }
 
 function App() {
@@ -52,7 +40,7 @@ function App() {
 
         // this avoids an infinite loop of watching messages as a dependency yet
         // needing to set messages within the socket
-        setMessages(m => [...m, msg]);
+        setMessages(m => [...m, {...msg, isMe: false}]);
       });
 
       setSocket(socket);
@@ -71,7 +59,7 @@ function App() {
   function handleMessageSend(e) {
     e.preventDefault();
     if(msgInput) {
-      setMessages([...messages, {msg:msgInput, username: "me"}]);
+      setMessages([...messages, {msg:msgInput, username: userName ? "me" : "me (as Anonymous)", isMe: true}]);
       socket.emit('chat message', {msg: msgInput, username: userName}, (data) => console.log("Server response: ", data))
       setMessageInput("");
     }
@@ -99,18 +87,24 @@ function App() {
   }
 
   return (
-    <div style={styles.root}>
+    <div className="App container">
+      <div className="row d-flex main-row">
+        <div className="col-xs-12 col-md-8 col-xl-6">
+          <div className="messageContainer" ref={messagesEl}>
+            {messages && messages.map(msg => <p className={`message ${msg.isMe ? 'message-me' : 'message-notme'}`} key={Math.floor(Math.random() * 100000)}><span className="message-sender">{msg.username}</span><br/>{msg.msg}</p>)}</div>
 
-      <div ref={messagesEl} style={styles.messageContainer}>{messages && messages.map(msg => <p key={Math.floor(Math.random() * 100000)}>{`${msg.username}: ${msg.msg}`}</p>)}</div>
-
-      <form>
-        <div style={styles.msgInput}>
-          <input type="text" name="msgInput" value={msgInput} onChange={handleTypeMessage} style={{flexGrow: 1}}/>
-          <button type="submit" onClick={handleMessageSend}>Send!</button>
+          <form>
+            <div className="msginput my-2">
+              <input type="text" name="msgInput" value={msgInput} onChange={handleTypeMessage} style={{flexGrow: 1}}/>
+              <button type="submit" onClick={handleMessageSend} className="ml-2">Send!</button>
+            </div>
+          </form>
+          <div className="d-flex d-flex-align-items-center">
+            <input placeholder="What's your name?" id="userNameInput" type="text" name="userNameInput" value={userName} onChange={handleChangeUsername} className="mr-2"/> <span className="help-text">(If left blank, you will show as "Anonymous")</span>
+          </div>
         </div>
-      </form>
-
-      <input placeholder="What's your name?" id="userNameInput" type="text" name="userNameInput" value={userName} onChange={handleChangeUsername} />
+        
+      </div>
     </div>
   );
 }
