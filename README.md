@@ -7,6 +7,8 @@ Things to consider:
 - `socket.io` defaults to using long polling over http rather than websockets. This would make it more reliable to older browsers. But honestly, IE 11 even supports websockets so unless you need to support really old operating systems, this requirement is not necessary.
 - You don't need `socket.io`. Regular websockets work just fine. But there is more work to do to uniquely identify and manage each client connection. [See this StackOverflow](https://stackoverflow.com/questions/10112178/differences-between-socket-io-and-websockets).
 
+
+
 ## Resources
 
 - [WebSockets for fun and profit](https://stackoverflow.blog/2019/12/18/websockets-for-fun-and-profit/)
