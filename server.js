@@ -81,15 +81,15 @@ io.on('connection', (socket) => {
   });
 
   // listening for 'chat message' events
-  socket.on('chat message', (msg, fn) => {
-    console.log('message: ' + msg);
+  socket.onAny((channelID, msg, fn) => {
+    console.log(`message (${channelID}): ${msg}`);
     if (!msg.username) {
       msg.username = 'Anonymous';
     }
-    fn('Got your message');
-    // broadcast the new msg to those clients listening for 'chat message' events
+    fn(`Got your message on channel ${channelID}`);
+    // broadcast the new msg to those clients listening for channelID events
     // The broadcast object on this socket doesn't send the message back to its destination
-    socket.broadcast.emit('chat message', msg);
+    socket.broadcast.emit(channelID, msg);
   });
 });
 

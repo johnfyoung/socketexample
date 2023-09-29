@@ -1,10 +1,22 @@
+  <div class="flex min-h-full flex-1 flex-col justify-start px-6 py-0 lg:px-8">
 {{#if logged_in}}
-<h1>Welcome</h1>
-{{else}}
-<div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-      <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Sign in to your account</h2>
+<h1>Welcome {{user.name}}</h1>
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm lg:max-w-lg rounded-sm shadow-md p-4 bg-peach-500">
+  <ul id="channels-list">
+    {{#each channels as |channel|}}
+      <li class="bg-peach-100 border-peach-900 p-4 border-solid border-2 mb-2 text-sans flex">
+        <span class="flex-1">{{channel.channel_name}}({{channel.userCount}})</span>
+        <button class="join-channel-button flex-initial rounded-md bg-orange-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600" data-channel="{{channel.channel_id}}">Join</button>
+      </li>
+    {{/each}}
+  </ul>
   </div>
-  {{> login}}
-</div>
+  <script src="/js/chat.js"></script>
+{{else}}
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+        <h2 class="font-heading text-center text-2xl font-bold leading-9 tracking-tight text-red mt-0">Sign in to your account</h2>
+    </div>
+    {{> login}}
+
 {{/if}}
+  </div>
