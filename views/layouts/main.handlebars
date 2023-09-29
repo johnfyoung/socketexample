@@ -1,0 +1,66 @@
+<html lang='en'>
+
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>Chat App</title>
+    <link rel='stylesheet' href='/css/style.css' />
+  </head>
+
+  <body>
+    <div class='bg-white'>
+      <header class='relative z-50 w-full flex-none'>
+        <nav class='container px-4 sm:px-6 lg:px-8 mx-auto'>
+          {{#if logged_in}}
+            <div class='relative flex justify-between align-center py-1'>
+              <a href='/' class='flex-none text-slate-900'>
+                <img
+                  src='/images/logo.svg'
+                  alt='Chit Chat logo'
+                  class='h-20 w-auto'
+                />
+              </a>
+              <div class='flex items-center'>
+                <a href='/profile' class='me-2'>profile</a>
+                <button class='no-button' id='logout'>logout</button>
+              </div>
+            </div>
+          {{else}}
+            <div class='relative flex justify-center py-[2.125rem]'>
+              <a href='/' class='flex-none text-slate-900'>
+                <img
+                  src='/images/logo.svg'
+                  alt='Chit Chat logo'
+                  class='h-40 w-auto'
+                />
+              </a>
+            </div>
+          {{/if}}
+
+          {{!-- <nav>
+              <!-- Conditionally render login or logout links -->
+
+                <a href='/profile'>profile</a>
+                |
+                <button class='no-button' id='logout'>logout</button>
+              {{/if}}
+            </nav> --}}
+
+        </nav>
+      </header>
+      <main class='container px-4 sm:px-6 lg:px-8 mx-auto mt-3'>
+        <!-- Render the sub layout -->
+        {{{body}}}
+      </main>
+      <footer>
+
+      </footer>
+    </div>
+
+    <!-- Render script for logged in users only -->
+    {{#if logged_in}}
+      <script src='/js/logout.js'></script>
+    {{/if}}
+  </body>
+
+</html>

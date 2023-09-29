@@ -1,0 +1,29 @@
+<div
+  class='sm:mx-auto sm:w-full sm:max-w-sm lg:max-w-lg rounded-sm shadow-md p-4 bg-peach-500'
+>
+  <h2>Channel: {{channel.channel_name}}</h2>
+  <ul>
+    {{#each channel.users as |user|}}
+      <li>{{user.name}}</li>
+    {{/each}}
+  </ul>
+  <div id='messages'></div>
+  <textarea id='message-box'></textarea>
+  <button id='send-msg' class=''>Click to emit</button>
+</div>
+<script
+  src='https://cdn.socket.io/4.6.0/socket.io.min.js'
+  integrity='sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+'
+  crossorigin='anonymous'
+></script>
+
+<script src='/js/chat.js'></script>
+<script>
+  let socket = null; if (typeof io !== 'undefined') { const messagesEl =
+  document.getElementById("messages"); const sendMessage = connect('{{channel.channel_id}}',
+  createUpdateHandler(messagesEl));
+  document.getElementById("send-msg").addEventListener("click", (event) => {
+  sendMessage(document.getElementById("message-box").value, '{{name}}');
+  document.getElementById("message-box").value = ""; }); }
+
+</script>
