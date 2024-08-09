@@ -71,3 +71,19 @@ function createUpdateHandler(containerEl) {
 //     console.log('Server response: ', data),
 //   );
 // }
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof io !== 'undefined') {
+    const messagesEl = document.getElementById('messages');
+    const sendMessage = connect(
+      '{{channel.channel_id}}',
+      createUpdateHandler(messagesEl),
+    );
+    document.getElementById('send-msg').addEventListener('click', () => {
+      sendMessage(document.getElementById('message-box').value, '{{name}}');
+      document.getElementById('message-box').value = '';
+    });
+  } else {
+    throw new Error('Socket IO is not loaded');
+  }
+});
